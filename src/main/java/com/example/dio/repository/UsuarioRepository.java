@@ -1,5 +1,6 @@
 package com.example.dio.repository;
 
+import com.example.dio.handler.BusinessException;
 import com.example.dio.model.Usuario;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,9 @@ public class UsuarioRepository {
     System.out.println(usuario);
   }
   public void update(Usuario usuario){
+    if (usuario.getLogin()==null ) {
+      throw new BusinessException("O login do usuário não pode ser nulo");
+    }
     System.out.println("UPDATE - Recebendo o usuário na camada de repositório");
     System.out.println(usuario);
   }

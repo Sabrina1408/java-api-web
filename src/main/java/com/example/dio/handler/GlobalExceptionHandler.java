@@ -1,6 +1,7 @@
 package com.example.dio.handler;
 
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.proxy.UndeclaredThrowableException;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
@@ -14,7 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-  @Resource
+  @Autowired
   private MessageSource messageSource;
   private HttpHeaders headers(){
     HttpHeaders headers = new HttpHeaders();
@@ -34,7 +35,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       UndeclaredThrowableException exception = (UndeclaredThrowableException) e;
       return handleBusinessException((BusinessException) exception.getUndeclaredThrowable(), request);
     } else {
-      String message = messageSource.getMessage("error.server", new Object[]{e.getMessage()}, null);
+      String message = messageSource.getMessage("error.server", new Object[]{e.getMessage()}, request.getLocale());
       ResponseError error = responseError(message,HttpStatus.INTERNAL_SERVER_ERROR);
       return handleExceptionInternal(e, error, headers(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
